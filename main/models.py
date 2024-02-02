@@ -23,12 +23,14 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(default=timezone.now)
     status = models.IntegerField(choices=STATUS, default=0)
+    likes = models.ManyToManyField(User, related_name='liked_posts')
+    view_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('story:detail', args=[self.slug])
+        return reverse('blog:detail', args=[self.slug])
 
     class Meta:
         ordering = ['date_created']
@@ -39,3 +41,6 @@ class Post(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
+        
+    def num_of_likes(self):
+        return self.likes.count()

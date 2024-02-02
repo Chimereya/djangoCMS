@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="container">
+    <div class="card-wrapper">
+     {% for blog in object_list %}
+    <div class="card">
+
+        <div class="card-text">
+         <a href="{{ blog.get_absolute_url }}"><h3>{{ blog.title }}</h3></a>
+            <p>{{blog.content|safe|truncatewords:20}}</p>
+
+        </div>
+
+        <div style="padding:12px;">
+            <small>10 mins read</small>
+        </div>
+
+    </div>
+    {% endfor %}
+
+    </div><!--end card wrapper-->
+  
+</div>
+<!--end container-->
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="container">
+    <h3>Delete Post</h3>
+    <div class="card-wrapper">
+    
+        <form method="post">
+            {% csrf_token %}
+
+           <p>Are you really sure you want to delete "{{object}}"?</p>
+        <button type="submit" >delete</button>
+
+           <a href="{% url 'blog:posts' %}">cancel</a>
+       
+        </form>
+
+    </div><!--end card wrapper-->
+  
+</div>
+<!--end container-->
+
+{% endblock %}
