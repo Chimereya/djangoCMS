@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h1>User profile</h1>
+
+<h3>{{user_profile.user.username}}</h3>
+
+ <img src="{{user_profile.profile_pic.url}}" height="100" width="100"/>
+
+{{user_profile.email}}
+
+{% if user_profile.bio %}
+<p>{{user_profile.bio}}</p>
+{% endif %}
+
+  {% if request.user == user %}
+                    <a href="{% url 'user:edit_profile' request.user %}">Edit profile</a>
+                    {% endif %}
+
+{% endblock %}
+

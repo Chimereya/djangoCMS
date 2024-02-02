@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<main class="max-w-2xl m-auto mt-10 px-3 py-3">
+
+<form method="post" enctype="multipart/form-data" class="post_form">
+    {% csrf_token %}
+
+    {{ u_form.as_p }}
+    {{ p_form.as_p }}
+
+    <button class="post_btn" type="submit">update profile</button>
+</form>
+
+</main>
+
+{% endblock %}

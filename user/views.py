@@ -6,9 +6,29 @@ from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from .forms import  UpdateUserForm, ProfileUpdateForm
+from .forms import  SignUpForm, LoginForm, UpdateUserForm, ProfileUpdateForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.views import LoginView
+from django.views.generic.edit import CreateView
+from django.contrib.auth import logout
+
+
+
+class SignUpView(CreateView):
+    form_class = SignUpForm
+    success_url = reverse_lazy('user:login')
+    template_name = 'user/signup.html'
+
+class LoginCustomView(LoginView):
+    form_class = LoginForm
+    template_name = 'user/login.html'
+    
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('user:login')
 
 
 
