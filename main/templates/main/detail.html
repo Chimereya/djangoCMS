@@ -11,10 +11,7 @@
   textarea{
     height:60px;
   }
-  
-  .reply {
-    margin-left: 20px;
-}
+
 </style>
 <article class="container-sm">
   <div class="detail-card">
@@ -46,6 +43,7 @@
       </svg>
       {{ post.view_count }}</span>
 
+
      
       <button id="like-button" data-post-id="{{ post.slug }}" {% if request.user in post.likes.all %}class="liked button" {% else %} class="button" {% endif %}>
         {% if request.user in post.likes.all %}Unlike{% else %}Like{% endif %}
@@ -55,7 +53,11 @@
 
     {% comment %} Bookmark post {% endcomment %}
    
-    
+    {% if is_favourite %}
+    <a href="{% url 'blog:favourite_post' post.slug %}" class="button outline">Remove from Favorites</a>
+{% else %}
+    <a href="{% url 'blog:favourite_post' post.slug %}" class="button outline">Add to Favorites</a>
+{% endif %}
 
    
 

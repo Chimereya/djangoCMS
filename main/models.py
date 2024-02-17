@@ -26,7 +26,7 @@ class Post(models.Model):
     status = models.IntegerField(choices=STATUS, default=0)
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
     view_count = models.IntegerField(default=0)
-    bookmarks = models.ManyToManyField(User, related_name='favorite_posts')
+    favourite = models.ManyToManyField(User, related_name='favourite', blank=True)
 
    
     
@@ -63,9 +63,5 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Bookmark(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-        
+
         

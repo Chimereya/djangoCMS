@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<main class="container-sm">
+    <h2>Bookmarks</h2>
+ 
+        <ul>
+            {% for bookmark in favourite_posts %}
+                <li>
+                    <a href="{{ bookmark.get_absolute_url }}">{{ bookmark.title }}</a>
+                  
+                </li>
+                {% empty %}
+                <p>No bookmarks found.</p>
+            {% endfor %}
+        </ul>
+    </main>
+   
+{% endblock %}

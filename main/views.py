@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import gettext as _
-from .models import Post, Comment, Bookmark
+from .models import Post, Comment
 from .forms import CommentForm
 from user.models import Profile
 from django.contrib.auth.models import User
@@ -20,9 +20,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .forms import CommentForm
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 
@@ -44,12 +44,11 @@ class PostListView(ListView):
     
     
 
-class PostDetailView(LoginRequiredMixin, DetailView):
+class PostDetailView(DetailView):
     model = Post
     template_name = 'main/detail.html'
     context_object_name = 'post'
-    
-    # get number of page views
+
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
         obj.increment_view_count()  # Increment view count
@@ -57,7 +56,9 @@ class PostDetailView(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        post = self.get_object()
         context['form'] = CommentForm()
+        context['is_favourite'] = post.favourite.filter(id=self.request.user.id).exists()
         return context
 
     def post(self, request, slug):
@@ -73,6 +74,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
             comment.parent = parent_comment
             comment.save()
             return redirect('blog:detail', slug=slug)
+        
         context = self.get_context_data(post=post, form=form)
         return self.render_to_response(context)
  
@@ -160,15 +162,23 @@ def like_post(request, slug):
         return JsonResponse({'error': _('Invalid request')}, status=400)
 
     
-@login_required
-def bookmark_post(request, slug):
+def favourite_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    bookmark, created = Bookmark.objects.get_or_create(user=request.user, post=post)
-    if not created:
-        bookmark.delete()
+    if post.favourite.filter(id=request.user.id).exists():
+        post.favourite.remove(request.user)
+        is_favourite = False
+    else:
+        post.favourite.add(request.user)
+        is_favourite = True
+
+    # Redirect to the post detail page after toggling favorite status
     return redirect('blog:detail', slug=slug)
 
-@login_required
-def bookmark_list(request):
-    bookmarks = Bookmark.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'main/bookmark_list.html', {'bookmarks': bookmarks})
+
+def favourite_post_list(request):
+    user = request.user
+    favourite_posts = user.favourite.all()
+    context = {
+        'favourite_posts': favourite_posts,
+    }
+    return render(request, 'main/favourite_posts.html', context)

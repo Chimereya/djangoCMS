@@ -13,6 +13,7 @@ urlpatterns = [
     path('delete/<int:pk>/', views.Delete.as_view(), name='delete'), 
     path('<str:username>/blog/', views.user_blog_page, name='user_page'),
     path('post/<slug:slug>/like/', views.like_post, name='like_post'),
-    path('post/<slug:slug>/bookmark/', views.bookmark_post, name='bookmark_post'),
-    path('bookmarks/', views.bookmark_list, name='bookmarks'),
+    path('post/<slug:slug>/favourite/', views.favourite_post, name='favourite_post'),
+    path('post/favourites/', views.favourite_post_list, name='favourite_post_list'),
+
     ]
