@@ -12,4 +12,5 @@ urlpatterns = [
     path('<username>/', views.profile, name='profile'),
     path('<username>/edit_profile/', views.edit_profile, name='edit_profile'),
     
+ 
 ]

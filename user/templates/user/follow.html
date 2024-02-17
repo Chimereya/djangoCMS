@@ -1,0 +1,11 @@
+{% comment %} {% if request.user != user %}
+    {% if request.user in user.profile.followers.all %}
+        <button class="unfollow-button" data-username="{{ user.username }}">Unfollow</button>
+    {% else %}
+        <button class="follow-button" data-username="{{ user.username }}">Follow</button>
+    {% endif %}
+{% endif %} {% endcomment %}
+
+<div id="follower-count">{{ user.profile.get_followers_count }}</div> followers
+<div id="following-count">{{ user.profile.get_following_count }}</div> following
+<button id="follow-button" data-username="{{ user.username }}">{{ follow_button_text }}</button>

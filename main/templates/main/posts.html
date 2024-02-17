@@ -2,7 +2,8 @@
 
 {% block main %}
 <div class="container">
-    <div style="margin-bottom:12px;"><a href="{% url 'blog:create'%}" style="padding:10px;color:#fff;background:deepskyblue;">Create New Post</a></div>
+   <div class="mb-5"><a href="{% url 'blog:create'%}" class="button primary">Create New Post</a></div>
+   <h3>You have {{  user_post_count }} posts</h3>
     <div class="card-wrapper">
      {% for post in blog_list %}
     <div class="card">

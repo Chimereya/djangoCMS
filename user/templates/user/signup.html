@@ -2,13 +2,41 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<div class="form-content">
-    <h2>Login</h2>
+<div class="form-content container">
+    <h2>Signup</h2>
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="button primary w-full mb-4">Login</button>
+        <div>
+            <label for="id_first_name">Firstname</label>
+        {{ form.first_name }}
+        </div>
+
+        <div>
+            <label for="id_last_name">Lastname</label>
+        {{ form.last_name }}
+        </div>
+
+        <div>
+            <label for="id_email">Email</label>
+        {{ form.email }}
+        </div>
+
+        <div>
+            <label for="id_username">Username</label>
+        {{ form.username }}
+        </div>
+
+        <div>
+            <label for="id_password1">Password</label>
+        {{ form.password1 }}
+        </div>
+
+        <div>
+            <label for="id_password2">Confirm Password</label>
+        {{ form.password2 }}
+        </div>
+        <button type="submit" class="button primary w-full mb-4">Signup</button>
     </form>
 </div>
 {% endblock %}

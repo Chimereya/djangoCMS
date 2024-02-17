@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'user.apps.UserConfig',
-    
+   
     'taggit',
     'ckeditor',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -129,4 +130,18 @@ STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles'))
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'blog:posts'
+LOGOUT_REDIRECT_URL = '/'
+
+CKEDITOR_CONFIGS = {
+    'default':
+        {
+
+         'width': '100%',
+         'extraPlugins': ','.join([
+             'codesnippet',
+
+         ]),
+         },
+}
+

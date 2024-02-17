@@ -1,0 +1,64 @@
+   <!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>{{ user_profile.user.username }}'s Blog</title>    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+<body>
+
+
+    <header class="container">
+        <nav class="navbar">
+          <div class="logo">
+            <a href=""><h4>{{ user_profile.user.username }}'s Blog</h4></a>
+           
+          </div>
+        
+          <div class="menu">
+             <a href="{% url 'blog:home'%}">Home</a>
+        
+             
+             {% if user.is_authenticated %}
+             {% if request.user == user %}
+        <a href="{% url 'user:profile' request.user %}">Profile</a>
+        <a href="{% url 'blog:user_post_list' user.username %}">Manage Posts</a>
+        <a href="{% url 'user:logout' %}">Logout</a>
+           {% endif %}
+        {% else %}
+        <a href="{% url 'user:login' %}" class="button outline">Login</a>
+        <a href="{% url 'user:signup' %}" class="button primary">Signup</a>
+        {% endif %}
+        
+        
+        
+            
+            </div>
+        
+        
+         
+        </nav>
+        </header>
+    
+   <main class="container">
+    <h2>Blog Posts</h2>
+
+        {% for post in blog_posts %}
+            <div class="card mb-4">
+                <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+                <p>{{ post.content|safe }}</p>
+                <p>Published on: {{ post.date_created }}</p>
+            </div>
+        {% empty %}
+            <li>There are no posts yet.</li>
+        {% endfor %}
+        </main>
+   
+</body>
+</html>

@@ -1,27 +1,47 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<div class="container">
-    <div class="card-wrapper">
-     {% for blog in object_list %}
-    <div class="card">
 
-        <div class="card-text">
-         <a href="{{ blog.get_absolute_url }}"><h3>{{ blog.title }}</h3></a>
-            <p>{{blog.content|safe|truncatewords:20}}</p>
-
-        </div>
-
-        <div style="padding:12px;">
-            <small>10 mins read</small>
-        </div>
-
+<section class="banner container">
+    <div>
+      <h1 class="mb-3">Welcome to PublishboxCMS</h1>
+          <p class="mb-5">Your Ultimate Article Publishing Platform</p>
+          <a href="{% url 'user:signup' %}" class="button primary lg">GET STARTED</a>
     </div>
-    {% endfor %}
-
-    </div><!--end card wrapper-->
   
-</div>
-<!--end container-->
+    <div>
+    </div>
+  </section>
+  
+  <section class="container">
+    <h3 class="text-center mb-5">Why Choose Publishbox?</h3>
+    <div class="features">
+   
+    <div class="feature">
+        <h3>User-Friendly Interface</h3>
+        <p>Our intuitive dashboard makes it easy for you to create, manage, and customize your blog posts effortlessly.</p>
+    </div>
+    <div class="feature">
+        <h3>Responsive Design</h3>
+        <p>Your blog will look stunning on any device, ensuring that your content reaches your audience wherever they are.</p>
+    </div>
+    <div class="feature">
+        <h3>Powerful Features</h3>
+        <p>From customizable themes to SEO tools, Blogify equips you with everything you need to make your blog stand out.</p>
+    </div>
+    <div class="feature">
+        <h3>Community Support</h3>
+        <p>Join a vibrant community of bloggers, exchange ideas, and receive feedback to help you grow your audience.</p>
+    </div>
+  </section>
+  <section style=" background-color: #e0ebf5;">
+    <div class="container">
+    <h2 style="color: #1f7ead;">Get Started Today</h2>
+    <p class="mb-4">Creating your own blog has never been easier. Sign up now and start sharing your stories with the world!</p>
+    <a href="{% url 'user:signup' %}" class="button primary">Sign Up Now</a>
+  </div>
+  </section>
+  
+
 
 {% endblock %}

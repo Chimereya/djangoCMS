@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Bookmarks</h2>
+    {% if bookmarks %}
+        <ul>
+            {% for bookmark in bookmarks %}
+                <li>
+                    <a href="{{ bookmark.post.get_absolute_url }}">{{ bookmark.post.title }}</a>
+                    <a href="{% url 'blog:remove_bookmark' bookmark.id %}">Remove Bookmark</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookmarks found.</p>
+    {% endif %}
+{% endblock %}

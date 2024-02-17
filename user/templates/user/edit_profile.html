@@ -2,15 +2,16 @@
 
 {% block main %}
 
-<main class="max-w-2xl m-auto mt-10 px-3 py-3">
+<main class="container">
 
-<form method="post" enctype="multipart/form-data" class="post_form">
+
+<form method="post" enctype="multipart/form-data" class="form-content">
     {% csrf_token %}
 
     {{ u_form.as_p }}
     {{ p_form.as_p }}
 
-    <button class="post_btn" type="submit">update profile</button>
+    <button class="button primary" type="submit">Save changes</button>
 </form>
 
 </main>

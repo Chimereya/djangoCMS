@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Profile
+from main.models import Post
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .decorators import unauthenticated_user
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from .forms import  SignUpForm, LoginForm, UpdateUserForm, ProfileUpdateForm
@@ -12,17 +12,21 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import CreateView
 from django.contrib.auth import logout
+from .mixins import PreventLoginSignupMixin
 
 
 
-class SignUpView(CreateView):
+class SignUpView(PreventLoginSignupMixin, CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('user:login')
     template_name = 'user/signup.html'
 
-class LoginCustomView(LoginView):
+class LoginCustomView(PreventLoginSignupMixin, LoginView):
     form_class = LoginForm
     template_name = 'user/login.html'
+    success_url = reverse_lazy('blog:home')
+    
+
     
 
 def logout_view(request):
@@ -31,7 +35,7 @@ def logout_view(request):
     return redirect('user:login')
 
 
-
+@login_required(login_url='user:login')
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     user_profile = get_object_or_404(Profile, user=user)
@@ -44,7 +48,7 @@ def profile(request, username):
     return render(request, 'user/profile.html', context)
 
 
-@login_required(login_url='account_login')
+@login_required(login_url='user:login')
 def edit_profile(request, username):
     user = get_object_or_404(User, username=username)
     user_profile = get_object_or_404(Profile, user=user)
@@ -66,3 +70,5 @@ def edit_profile(request, username):
                                                         'user_profile': user_profile,
                                                         'u_form': u_form,
                                                         'p_form': p_form})
+
+

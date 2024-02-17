@@ -1,0 +1,19 @@
+<!-- replies.html -->
+{% for reply in comments %}
+    <div style="border-left: 2px solid lightgrey; padding-left: 10px; margin-bottom: 10px;">
+        <p>{{ reply.text }}</p>
+        <button class="reply-toggle">Reply</button>
+        <div class="reply-form" style="display: none;">
+            <form method="post" action="{% url 'blog:detail' slug=reply.post.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="parent_comment_id" value="{{ reply.id }}">
+                {{ form.as_p }}
+                <button type="submit" class="button primary">Submit Reply</button>
+            </form>
+        </div>
+        <button class="replies-toggle button link">View Replies</button>
+        <div class="replies" style="display: none;">
+            {% include 'main/replies.html' with comments=reply.replies.all %}
+        </div>
+    </div>
+{% endfor %}

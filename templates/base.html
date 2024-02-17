@@ -7,44 +7,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+<script
+src="https://kit.fontawesome.com/66af27bf36.js"
+crossorigin="anonymous"
+></script>
 
 <body>
 
 
-<nav class="navbar">
-  <div class="logo">
-  <a href="{% url 'blog:home'%}">PublishboxCMS</a>
-   
-  </div>
+  <header class="container">
+    <nav class="navbar">
+      <a href="{% url 'blog:home'%}" style="font-weight:800;">PublishboxCMS</a>
+      <button class="nav-btn" id="navBtn">MENU</button>
 
-  <div class="menu">
-     <a href="{% url 'blog:home'%}">Home</a>
-
-     
-     {% if user.is_authenticated %}
+      <div class="nav-menu">
+        <ul>
+          <li><a href="{% url 'blog:create' %}">Publish a post</a></li>
+          {% if user.is_authenticated %}
      {% if request.user == user %}
-<a href="{% url 'user:profile' request.user %}">Profile</a>
-<a href="{% url 'blog:posts'%}">Manage Posts</a>
-<a href="{% url 'user:logout' %}">Logout</a>
+<li><a href="{% url 'user:profile' request.user %}">Profile</a></li>
+<li><a href="{% url 'blog:bookmarks' %}">Bookmarks</a></li>
+<li><a href="{% url 'user:logout' %}">Logout</a></li>
    {% endif %}
 {% else %}
-<a href="{% url 'user:login' %}" class="button">Login</a>
-<a href="{% url 'user:signup' %}" class="button primary">Signup</a>
+<li><a href="{% url 'user:login' %}" class="button outline">Login</a></li>
+<li><a href="{% url 'user:signup' %}" class="button primary">Signup</a></li>
+
 {% endif %}
 
 
+        </ul>
+      </div>
 
-    
-    </div>
+      
+  <div class="overlay"></div>
+    </nav>
+  </header>
 
 
- 
-</nav>
+
+
+  
+
+
+
 {% block main %}
+
 
  {% endblock %}
 
+
+ <footer>
+  <div class="container">
+  <h2>Join the Conversation</h2>
+  <p style="font-size:14px;">Connect with us on social media to stay updated with the latest news, tips, and inspiration:</p>
+  <div class="social-links">
+      <a href="#" style="font-size:14px;">Facebook</a>
+      <a href="#" style="font-size:14px;">Twitter</a>
+      <a href="#" style="font-size:14px;">Instagram</a>
+  </div>
+</div>
+</footer>
+
+{% block javascript %}
+    <script src="{% static 'js/script.js' %}"></script>
+
+    {% endblock javascript %}
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('#like-button').click(function(){
+          var post_slug = "{{ post.slug }}";
+          var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    
+          $.ajax({
+            type: 'POST',
+            url: '/post/' + post_slug + '/like/',
+            headers: { "X-CSRFToken": csrftoken },
+            success: function(data){
+              if (data.liked) {
+                $('#like-button').addClass('liked').text('Unlike');
+              } else {
+                $('#like-button').removeClass('liked').text('Like');
+              }
+              
+              $('#like-count').text(data.count + ' Likes');
+            },
+            error: function(xhr, errmsg, err){
+              console.log(err);
+            }
+          });
+        });
+      });
+    </script>
 
 </body>

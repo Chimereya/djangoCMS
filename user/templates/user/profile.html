@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% block main %}
+<main class="container">
 <h1>User profile</h1>
 
 <h3>{{user_profile.user.username}}</h3>
@@ -16,6 +17,11 @@
   {% if request.user == user %}
                     <a href="{% url 'user:edit_profile' request.user %}">Edit profile</a>
                     {% endif %}
+
+                          <a href="{% url 'blog:user_page' request.user %}">Visit blog</a>
+                       
+
+</main>
 
 {% endblock %}
 
