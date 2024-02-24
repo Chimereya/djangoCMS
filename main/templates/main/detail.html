@@ -12,6 +12,7 @@
     height:60px;
   }
 
+
 </style>
 <article class="container-sm">
   <div class="detail-card">
@@ -19,6 +20,7 @@
 
     <div style="padding: 12px">
       <small>10 mins read</small>
+      <p><small>by <a href="{% url 'user:profile' request.user %}" class="link">{{ post.author }}</a> {{ post.date_created }}</small></p>
       <b>total words: {{post.content|wordcount}}</b>
     </div>
 
@@ -27,8 +29,8 @@
     </div>
   </div>
 
-  <div style="display: inline-block">
-    <span class="button outline icon"><svg
+  <div  style="gap:10;">
+    <button class="button outline icon" style="display:inline-block;"><svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
         height="16"
@@ -41,22 +43,22 @@
           d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"
         />
       </svg>
-      {{ post.view_count }}</span>
+      {{ post.view_count }}</button>
 
 
      
-      <button id="like-button" data-post-id="{{ post.slug }}" {% if request.user in post.likes.all %}class="liked button" {% else %} class="button" {% endif %}>
+      <button  style="display:inline-block;" id="like-button" data-post-id="{{ post.slug }}" {% if request.user in post.likes.all %}class="liked button" {% else %} class="button" {% endif %}>
         {% if request.user in post.likes.all %}Unlike{% else %}Like{% endif %}
       </button>
-      <p id="like-count">{{ post.likes.count }} Likes</p>
+      <span id="like-count">{{ post.likes.count }} Likes</span>
   
 
     {% comment %} Bookmark post {% endcomment %}
    
     {% if is_favourite %}
-    <a href="{% url 'blog:favourite_post' post.slug %}" class="button outline">Remove from Favorites</a>
-{% else %}
-    <a href="{% url 'blog:favourite_post' post.slug %}" class="button outline">Add to Favorites</a>
+    <a href="{% url 'blog:favourite_post' post.slug %}" class="button outline">Unbookmark</a>
+    {% else %}
+    <a href="{% url 'blog:favourite_post' post.slug %}" class="button outline">Bookmark</a>
 {% endif %}
 
    
@@ -121,7 +123,7 @@
 {% for comment in post.comments.all %}
     {% if not comment.parent %}
         <div style="border-left: 2px solid lightgrey; padding-left: 10px; margin-bottom: 10px;">
-            <p>{{ comment.text }}</p>
+            <p><small>{{ comment.author }}</small> {{ comment.text }}</p>
             <button class="reply-toggle">Reply</button>
             <div class="reply-form" style="display: none;">
                 <form method="post" action="{% url 'blog:detail' slug=post.slug %}">

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Profile
+from .models import Profile, FollowersCount
 from main.models import Post
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
@@ -13,6 +13,7 @@ from django.contrib.auth.views import LoginView
 from django.views.generic.edit import CreateView
 from django.contrib.auth import logout
 from .mixins import PreventLoginSignupMixin
+from django.http import JsonResponse
 
 
 
@@ -35,15 +36,29 @@ def logout_view(request):
     return redirect('user:login')
 
 
-@login_required(login_url='user:login')
-def profile(request, username):
-    user = get_object_or_404(User, username=username)
-    user_profile = get_object_or_404(Profile, user=user)
 
+def profile(request, username):
+    user_object = get_object_or_404(User, username=username)
+    user_profile = Profile.objects.get(user=user_object)
+    
+
+    follower = request.user.username
+    user = username
+
+    if FollowersCount.objects.filter(follower=follower, user=user).first():
+        button_text = 'unfollow'
+    else:
+        button_text = 'follow'
+
+    user_followers = len(FollowersCount.objects.filter(user=username))
+    user_following = len(FollowersCount.objects.filter(follower=username))
 
     context = {
-        'user': user,
+        'user_object': user_object,
         'user_profile': user_profile,
+        'button_text': button_text,
+        'user_followers': user_followers,
+        'user_following': user_following,
     }
     return render(request, 'user/profile.html', context)
 
@@ -70,5 +85,28 @@ def edit_profile(request, username):
                                                         'user_profile': user_profile,
                                                         'u_form': u_form,
                                                         'p_form': p_form})
+    
+    
 
 
+
+@login_required(login_url='user:login')
+def follow(request):
+    if request.method == "POST":
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+        if FollowersCount.objects.filter(follower=follower, user=user).exists():
+            delete_follower = FollowersCount.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+            action = 'unfollowed'
+        else:
+            new_follower = FollowersCount.objects.create(follower=follower, user=user)
+            action = 'followed'
+
+        response_data = {'status': 'success', 'action': action}
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+ 

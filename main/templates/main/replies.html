@@ -1,7 +1,7 @@
 <!-- replies.html -->
 {% for reply in comments %}
     <div style="border-left: 2px solid lightgrey; padding-left: 10px; margin-bottom: 10px;">
-        <p>{{ reply.text }}</p>
+        <p><small>{{ reply.author }}</small> {{ reply.text }}</p>
         <button class="reply-toggle">Reply</button>
         <div class="reply-form" style="display: none;">
             <form method="post" action="{% url 'blog:detail' slug=reply.post.slug %}">

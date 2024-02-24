@@ -72,6 +72,7 @@ class PostDetailView(DetailView):
             comment = form.save(commit=False)
             comment.post = post
             comment.parent = parent_comment
+            comment.author = request.user
             comment.save()
             return redirect('blog:detail', slug=slug)
         
@@ -182,3 +183,4 @@ def favourite_post_list(request):
         'favourite_posts': favourite_posts,
     }
     return render(request, 'main/favourite_posts.html', context)
+
