@@ -20,7 +20,7 @@
 
     <div style="padding: 12px">
       <small>10 mins read</small>
-      <p><small>by <a href="{% url 'user:profile' request.user %}" class="link">{{ post.author }}</a> {{ post.date_created }}</small></p>
+      <p><small>by <a href="{% url 'user:profile' post.author %}" class="link">{{ post.author }}</a> {{ post.date_created }}</small></p>
       <b>total words: {{post.content|wordcount}}</b>
     </div>
 

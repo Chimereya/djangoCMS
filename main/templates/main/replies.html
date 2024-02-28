@@ -1,9 +1,10 @@
-<!-- replies.html -->
+
 {% for reply in comments %}
     <div style="border-left: 2px solid lightgrey; padding-left: 10px; margin-bottom: 10px;">
         <p><small>{{ reply.author }}</small> {{ reply.text }}</p>
         <button class="reply-toggle">Reply</button>
         <div class="reply-form" style="display: none;">
+           <!-- reply to replies form -->
             <form method="post" action="{% url 'blog:detail' slug=reply.post.slug %}">
                 {% csrf_token %}
                 <input type="hidden" name="parent_comment_id" value="{{ reply.id }}">

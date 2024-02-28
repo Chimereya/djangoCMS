@@ -18,7 +18,7 @@
         <nav class="navbar">
           <div class="logo">
 
-            <a href=""><h4>{{ user_profile.user.username }}'s Blog</h4></a>
+            <a href=""><h4>{{ user.username }}'s Blog</h4></a>
            
           </div>
         
@@ -29,7 +29,7 @@
              {% if user.is_authenticated %}
              {% if request.user == user %}
         <a href="{% url 'user:profile' request.user %}">Profile</a>
-        <a href="{% url 'blog:user_post_list' user.username %}">Manage Posts</a>
+        <a href="{% url 'blog:user_post_list' request.user %}">Manage Posts</a>
         <a href="{% url 'user:logout' %}">Logout</a>
            {% endif %}
         {% else %}
@@ -48,17 +48,32 @@
         </header>
     
    <main class="container">
-    <h2>Blog Posts</h2>
 
-        {% for post in blog_posts %}
-            <div class="card mb-4">
-                <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
-                <p>{{ post.content|safe }}</p>
-                <p>Published on: {{ post.date_created }}</p>
-            </div>
-        {% empty %}
-            <li>There are no posts yet.</li>
-        {% endfor %}
+    <h2>{{ user.username }}'s Posts</h2>
+    <ul>
+    {% for post in posts %}
+        <div class="card mb-4">
+
+        <div class="card-text">
+         <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+            <p>{{post.content|safe|truncatewords:20}}</p>
+
+        </div>
+
+        <div style="padding:12px;">
+
+      <small>published by <a href="{% url 'user:profile' post.author %}">{{post.author}}</a></small>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/><small>{{ post.view_count }}</small></p>
+                
+            <small>10 mins read</small>
+        </div>
+
+    </div>
+    {% endfor %}
+    </ul>
         </main>
    
 </body>

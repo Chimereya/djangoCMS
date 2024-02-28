@@ -1,84 +1,81 @@
-{% extends 'base.html' %}
-{% block main %}
+{% extends 'base.html' %} {% block main %}
 <main class="container">
-<h1>User profile</h1>
+  <h1>User profile</h1>
 
-<h3>{{user_profile.user.username}}</h3>
+  <h3>{{user_profile.user.username}}</h3>
 
- <img src="{{user_profile.profile_pic.url}}" height="100" width="100"/>
+  <img
+    style="border-radius: 999px; object-fit: cover"
+    src="{{user_profile.profile_pic.url}}"
+    height="100"
+    width="100"
+  />
 
-{{user_profile.email}}
+  {{user_profile.email}} {% if user_profile.bio %}
+  <p>{{user_profile.bio}}</p>
+  {% endif %} 
+  <a href="{% url 'blog:user_posts' user_profile.user.username %}">See all posts</a>
+    {% if user_followers == 0 or 1 %}
+  <p id="follower-count">{{user_followers}}</p>
+  follower {% else %}
+  <p id="follower-count">{{user_followers}}</p>
+  followers {% endif %}
+  <p id="following-count">{{user_following}}following</p>
 
-{% if user_profile.bio %}
-<p>{{user_profile.bio}}</p>
-{% endif %}
+  <form id="follow-form" action="{% url 'user:follow' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" value="{{ user.username }}" name="follower" />
+    <input type="hidden" value="{{ user_object.username }}" name="user" />
+    {% if user_object.username == user.username %}
+    <a href="{% url 'user:edit_profile' request.user %}">Edit profile</a>
+    {% else %}
+    <button class="button" id="follow-button" type="submit">
+      {{ button_text }}
+    </button>
+    {% endif %}
+  </form>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("form#follow-form").on("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-
-  {% if request.user == user %}
-                    <a href="{% url 'user:edit_profile' request.user %}">Edit profile</a>
-                    {% endif %}
-
-                          <a href="{% url 'blog:user_page' request.user.username %}">Visit blog</a>
-
-                          {% if user_followers == 0 or 1 %}
-<p id="follower-count">{{user_followers}}</p> follower
-{% else %}
-<p id="follower-count">{{user_followers}}</p> followers
-{% endif %}
-<p id="following-count">{{user_following}}following</p>
-                        
-<form id="follow-form" action="{% url 'user:follow' %}" method="POST">
-  {% csrf_token %}
-  <input type="hidden" value="{{ user.username }}" name="follower"/>
-  <input type="hidden" value="{{ user_object.username }}" name="user"/>
-  {% if user_object.username == user.username %}
-      <a href="{% url 'user:edit_profile' request.user %}">Edit profile</a>
-  {% else %}
-      <button class="button" id="follow-button" type="submit">{{ button_text }}</button>
-  {% endif %}
-</form>
-
-
-
- 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function() {
-      $('form#follow-form').on('submit', function(event) {
-          event.preventDefault(); // Prevent the default form submission
-  
-          var formData = $(this).serialize(); // Serialize form data
-          var followButton = $('#follow-button');
-          $.ajax({
-              url: $(this).attr('action'), // Form action URL
-              type: 'POST',
-              data: formData,
-              success: function(response) {
-                  if (response.status === 'success') {
-                      // Update UI based on the action
-                      if (response.action === 'followed') {
-                          followButton.text('Unfollow');
-                          // Increment the follower count
-                          $('#follower-count').text(parseInt($('#follower-count').text()) + 1);
-                      } else {
-                          followButton.text('Follow');
-                          // Decrement the follower count
-                          $('#follower-count').text(parseInt($('#follower-count').text()) - 1);
-                      }
-                      // Update the following count
-                      $('#following-count').text(response.following_count);
-                  } else {
-                      alert('Error: ' + response.message);
-                  }
-              },
-              error: function(xhr, status, error) {
-                  console.error(xhr.responseText);
+        var formData = $(this).serialize(); // Serialize form data
+        var followButton = $("#follow-button");
+        $.ajax({
+          url: $(this).attr("action"), // Form action URL
+          type: "POST",
+          data: formData,
+          success: function (response) {
+            if (response.status === "success") {
+              // Update UI based on the action
+              if (response.action === "followed") {
+                followButton.text("Unfollow");
+                // Increment the follower count
+                $("#follower-count").text(
+                  parseInt($("#follower-count").text()) + 1
+                );
+              } else {
+                followButton.text("Follow");
+                // Decrement the follower count
+                $("#follower-count").text(
+                  parseInt($("#follower-count").text()) - 1
+                );
               }
-          });
+              // Update the following count
+              $("#following-count").text(response.following_count);
+            } else {
+              alert("Error: " + response.message);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
       });
-  });
+    });
   </script>
-  
-    
-{% endblock %}                      
+
+  {% endblock %}
+</main>

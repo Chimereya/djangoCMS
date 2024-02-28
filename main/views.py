@@ -82,7 +82,7 @@ class PostDetailView(DetailView):
     
 class PostView(LoginRequiredMixin, ListView):
     model = Post
-    template_name = 'main/posts.html'
+    template_name = 'main/manage_posts.html'
     context_object_name = 'blog_list'
     
     def get_context_data(self, **kwargs):
@@ -132,16 +132,11 @@ class Delete(LoginRequiredMixin, DeleteView):
     template_name = 'main/delete.html'
 
 
-
-def user_blog_page(request, username):
+def user_posts(request, username):
     user = User.objects.get(username=username)
     user_profile = Profile.objects.get(user=user)
-    blog_posts = Post.objects.filter(author=user).order_by('-date_created')
-    context = {
-        'user_profile': user_profile,
-        'blog_posts': blog_posts,
-    }
-    return render(request, 'main/user_page.html', context)
+    posts = Post.objects.filter(author=user)
+    return render(request, 'main/user_page.html', {'posts': posts, 'user': user, 'user_profile': user_profile})
 
 @login_required
 def like_post(request, slug):

@@ -10,10 +10,8 @@ rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 --text-color:#262626;
 
   /*fontfamily*/
-  --ff-1:'Lora', serif;
-
-	 --ff-2:cursive;
-   
+  /* --ff-1:'Lora', serif; */
+  --ff-1:system-ui;
 
    /* font size */
 }
@@ -490,9 +488,9 @@ nav{
 }
 
 .features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 300px);
-  gap: 25px;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, 400px);
+  gap:14px;
 }
 
 .feature{
