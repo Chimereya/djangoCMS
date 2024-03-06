@@ -10,8 +10,8 @@ rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 --text-color:#262626;
 
   /*fontfamily*/
-  /* --ff-1:'Lora', serif; */
-  --ff-1:system-ui;
+  --ff-1:'Lora', serif;
+
 
    /* font size */
 }
@@ -489,7 +489,7 @@ nav{
 
 .features {
   display:grid;
-  grid-template-columns: repeat(auto-fit, 400px);
+  grid-template-columns: repeat(auto-fit, 32%);
   gap:14px;
 }
 
@@ -517,6 +517,12 @@ footer {
 
 
 /* responsiveness */
+
+@media(max-width:860){
+  .features {
+    grid-template-columns: repeat(auto-fit, 50%);
+  }
+}
 
 @media(max-width:600px){
   h1{

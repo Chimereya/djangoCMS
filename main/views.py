@@ -36,11 +36,10 @@ class HomeView(TemplateView):
 class PostListView(ListView):
     model = Post
     template_name = 'main/post_list.html'
-    
+    paginate_by = 2
 
     def get_queryset(self):
         return Post.objects.all()
-    
     
     
 
@@ -170,7 +169,7 @@ def favourite_post(request, slug):
     # Redirect to the post detail page after toggling favorite status
     return redirect('blog:detail', slug=slug)
 
-
+@login_required
 def favourite_post_list(request):
     user = request.user
     favourite_posts = user.favourite.all()
